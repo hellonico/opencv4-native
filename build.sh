@@ -18,8 +18,8 @@ function do_clone() {
 }
 
 function do_clean() {
-	rm -fr $CV_BUILD_DIR
-	mkdir -p $CV_BUILD_DIR
+    rm -fr $CV_BUILD_DIR
+    mkdir -p $CV_BUILD_DIR
     echo $CV_BUILD_DIR
 }
 
@@ -92,11 +92,13 @@ function install_core() {
 }
 
 function deploy_core() {
+    path_to_jar=`find opencv/build/bin -name *.jar`
+    echo "> $path_to_jar"
     mvn deploy:deploy-file -DgroupId=opencv \
     -DartifactId=opencv \
     -Dversion=$VERSION \
     -Dpackaging=jar \
-    -Dfile=build/opencv-core.jar \
+    -Dfile=$path_to_jar \
     -DrepositoryId=$REPOSITORYID \
     -Durl=$URL
 }
@@ -112,6 +114,26 @@ function deploy_native() {
     -Dclassifiers=osx_64,linux_64,windows_64 \
     -Dfiles=$BUILD_FOLDER/opencv-native-osx_64.jar,$BUILD_FOLDER/opencv-native-linux_64.jar,$BUILD_FOLDER/opencv-native-windows_64.jar \
     -Dtypes=jar,jar,jar \
+    -Dpackaging=jar \
+    -DrepositoryId=$REPOSITORYID \
+    -Durl=$URL
+}
+
+function deploy_2_19() {
+        # path_to_so=`find opencv/build/ -name lib*.so`
+    ARCH="linux_64"
+    target_file=$BUILD_FOLDER/opencv-native-$ARCH.jar
+    vers=4.0.0-beta
+    
+    # echo $path_to_so
+    echo $target_file
+    # cp $path_to_so natives/$ARCH/
+    # jar cvf $target_file natives/$ARCH
+
+    mvn deploy:deploy-file -DgroupId=opencv \
+    -DartifactId=opencv-native-$ARCH \
+    -Dversion=$vers \
+    -Dfile=$target_file \
     -Dpackaging=jar \
     -DrepositoryId=$REPOSITORYID \
     -Durl=$URL

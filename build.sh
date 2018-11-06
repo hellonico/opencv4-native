@@ -1,7 +1,7 @@
 export BUILD_FOLDER=build
 export URL=http://hellonico.info:8081/repository/hellonico/
 export REPOSITORYID=vendredi
-export VERSION=4.0.0-beta
+# export VERSION=4.0.0-beta1
 arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "linux_64" "linux_32")
 
 function create_tree() {    
@@ -34,6 +34,16 @@ function do_clean() {
     rm -fr $CV_BUILD_DIR
     mkdir -p $CV_BUILD_DIR
     echo $CV_BUILD_DIR
+}
+
+function install_clj() {
+    clj_version="1.9.0.397"
+    script_file="linux-install-$clj_version.sh"
+    curl -O "https://download.clojure.org/install/$script_file"
+    chmod +x $script_file
+    sudo ./$script_file
+    rm $script_file
+    sudo apt install rlwrap
 }
 
 function build_cmake() {
@@ -163,8 +173,7 @@ function linux-deps() {
     # python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 }
 
-
-function install_so() {
+function so_to_jar() {
     path_to_so=$1
     custom=$2
     ARCH=$3
@@ -176,9 +185,13 @@ function install_so() {
     echo "arch:$ARCH"
     echo "version:$vers"
 
-    cp $path_to_so natives/$ARCH/
+    cp $path_to_so natives/$ARCH/libopencv_java400.so
     jar cvf $target_file natives/$ARCH
+}
 
+function install_so() {
+    so_to_jar $1 $2 $3 $4
+    
     mvn install:install-file \
     -DgroupId=opencv \
     -DartifactId=opencv-native-$custom \
@@ -233,9 +246,10 @@ function install_core() {
 function deploy_core() {
     path_to_jar=`find opencv/build/bin -name *.jar`
     echo "> $path_to_jar"
+    vers=$1
     mvn deploy:deploy-file -DgroupId=opencv \
     -DartifactId=opencv \
-    -Dversion=$VERSION \
+    -Dversion=$vers \
     -Dpackaging=jar \
     -Dfile=$path_to_jar \
     -DrepositoryId=$REPOSITORYID \
@@ -246,9 +260,10 @@ function deploy_native() {
     # -Dclassifiers=osx,linux,windows,raspberry \
     # -Dfiles=$BUILD_FOLDER/opencv-native-macosx.jar,$BUILD_FOLDER/opencv-native-linux.jar,$BUILD_FOLDER/opencv-native-windows.jar,$BUILD_FOLDER/opencv-native-raspberry.jar \
     # -Dtypes=jar,jar,jar,jar \
+    vers=$1
     mvn deploy:deploy-file -DgroupId=opencv \
     -DartifactId=opencv-native \
-    -Dversion=$VERSION \
+    -Dversion=$vers \
     -Dfile=$BUILD_FOLDER/opencv-native.jar \
     -Dclassifiers=osx_64,linux_64,windows_64 \
     -Dfiles=$BUILD_FOLDER/opencv-native-osx_64.jar,$BUILD_FOLDER/opencv-native-linux_64.jar,$BUILD_FOLDER/opencv-native-windows_64.jar \

@@ -38,6 +38,7 @@ function do_clean() {
 
 function build_cmake() {
 cd $CV_BUILD_DIR
+echo $CV_BUILD_DIR
 cmake \
 -D CMAKE_BUILD_TYPE=RELEASE \
 -G "${GENERATOR_NAME}" \
@@ -131,7 +132,8 @@ cmake \
 -D WITH_WEBP=ON \
 -D WITH_XIMEA=OFF \
 -D WITH_XINE=OFF \
-${SOURCE_DIR}
+${CV_SOURCE_DIR}
+
 }
 
 function build_cmake2() {
@@ -184,7 +186,14 @@ function install_so() {
     -Dpackaging=jar \
     -Dfile=$target_file
 
-    echo "[opencv/opencv-native-$custom \"$vers\"]"
+    outut_for_build opencv-native-$custom $vers
+}
+
+function outut_for_build() {
+    custom=$1
+    vers=$2
+    echo "[opencv/$custom \"$vers\"]"
+    echo "opencv/$custom {:mvn/version \"$vers\"}"
 }
 
 function install_so_from_build() {
@@ -249,25 +258,22 @@ function deploy_native() {
     -Durl=$URL
 }
 
-function deploy_one() {
-        # path_to_so=`find opencv/build/ -name lib*.so`
-    ARCH="linux_64"
-    # target_file=$BUILD_FOLDER/opencv-native-$ARCH.jar
-    target_file=$BUILD_FOLDER/opencv-native-linux_64-4.0.0-beta.jar
-    vers=4.0.0-beta
-    
-    # echo $path_to_so
-    echo $target_file
-    # cp $path_to_so natives/$ARCH/
-    # jar cvf $target_file natives/$ARCH
+function deploy_one_jar() {    
+    jar_file=$1
+    arch=$2 
+    vers=$3
+    echo $jar_file
 
     mvn deploy:deploy-file -DgroupId=opencv \
-    -DartifactId=opencv-native-$ARCH \
+    -DartifactId=opencv-native-$arch \
     -Dversion=$vers \
-    -Dfile=$target_file \
+    -Dfile=$jar_file \
     -Dpackaging=jar \
     -DrepositoryId=$REPOSITORYID \
     -Durl=$URL
+
+    outut_for_build opencv-native-$arch $vers
+
 }
 
 

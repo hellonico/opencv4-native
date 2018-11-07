@@ -29,6 +29,7 @@ function build_make() {
 
 function do_clone() {
     git clone --branch $CV_VERSION --depth 1 https://github.com/opencv/opencv.git opencv
+    git clone --depth 1 https://github.com/opencv/opencv_contrib.git opencv_contrib
 }
 
 function do_clean() {
@@ -54,6 +55,8 @@ cmake \
 -D CMAKE_BUILD_TYPE=RELEASE \
 -G "${GENERATOR_NAME}" \
 --build ${BUILD_DIR} \
+-D OPENCV_EXTRA_MODULES_PATH=$CV_SOURCE_DIR/../opencv_contrib/modules/xfeatures2d \
+-D OPENCV_ENABLE_NONFREE=ON \
 -D BUILD_CUDA_STUBS=OFF \
 -D BUILD_DOCS=ON \
 -D BUILD_EXAMPLES=OFF \

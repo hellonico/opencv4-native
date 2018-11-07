@@ -28,15 +28,14 @@ or
 ```
 
 . build.sh && install_so sos/libopencv_2_19.so libc_2_19 linux_64 4.0.0-beta
-
 . build.sh && install_so sos/libopencv_2_19_arm64.so 2_19_arm64 linux_64 4.0.0-beta
 
 # build and deploy all native jars from natives folder
 
 ```
 . build.sh && build_native_jars
-. build.sh && deploy_native 4.0.0-beta1
-. build.sh && deploy_core 4.0.0-beta1
+. build.sh && deploy_native 4.0.0-beta2
+. build.sh && deploy_core 4.0.0-beta2
 ```
 
 # deploy one jar

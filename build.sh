@@ -145,6 +145,8 @@ cmake \
 -D WITH_XINE=OFF \
 ${CV_SOURCE_DIR}
 
+
+cd ../..
 }
 
 function build_cmake2() {
@@ -172,6 +174,9 @@ function linux-deps() {
     apt update
     apt install ant build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
     # python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+}
+function debian-video() {
+    apt install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
 }
 
 function so_to_jar() {
@@ -266,9 +271,9 @@ function deploy_native() {
     -DartifactId=opencv-native \
     -Dversion=$vers \
     -Dfile=$BUILD_FOLDER/opencv-native.jar \
-    -Dclassifiers=osx_64,linux_64,windows_64 \
-    -Dfiles=$BUILD_FOLDER/opencv-native-osx_64.jar,$BUILD_FOLDER/opencv-native-linux_64.jar,$BUILD_FOLDER/opencv-native-windows_64.jar \
-    -Dtypes=jar,jar,jar \
+    -Dclassifiers=osx_64,linux_64,windows_64,linux_arm64 \
+    -Dfiles=$BUILD_FOLDER/opencv-native-osx_64.jar,$BUILD_FOLDER/opencv-native-linux_64.jar,$BUILD_FOLDER/opencv-native-windows_64.jar,$BUILD_FOLDER/opencv-native-linux_arm64.jar \
+    -Dtypes=jar,jar,jar,jar \
     -Dpackaging=jar \
     -DrepositoryId=$REPOSITORYID \
     -Durl=$URL

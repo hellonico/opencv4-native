@@ -55,7 +55,7 @@ cmake \
 -G "${GENERATOR_NAME}" \
 --build ${BUILD_DIR} \
 -D BUILD_CUDA_STUBS=OFF \
--D BUILD_DOCS=OFF \
+-D BUILD_DOCS=ON \
 -D BUILD_EXAMPLES=OFF \
 -D BUILD_JASPER=ON \
 -D BUILD_JPEG=ON \
@@ -91,7 +91,7 @@ cmake \
 -D BUILD_opencv_imgcodecs=ON \
 -D BUILD_opencv_imgproc=ON \
 -D BUILD_opencv_java=ON \
--D BUILD_opencv_ml=OFF \
+-D BUILD_opencv_ml=ON \
 -D BUILD_opencv_objdetect=ON \
 -D BUILD_opencv_photo=ON \
 -D BUILD_opencv_python2=OFF \
@@ -103,7 +103,7 @@ cmake \
 -D BUILD_opencv_video=ON \
 -D BUILD_opencv_videoio=ON \
 -D BUILD_opencv_videostab=ON \
--D BUILD_opencv_viz=OFF \
+-D BUILD_opencv_viz=ON \
 -D BUILD_opencv_world=OFF \
 -D CMAKE_BUILD_TYPE=RELEASE \
 -D WITH_1394=ON \

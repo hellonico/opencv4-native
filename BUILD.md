@@ -3,6 +3,7 @@
 ```
 . build.sh && linux-deps
 . build.sh && do_clone 
+. build.sh && do_clean 
 . build.sh && build_cmake
 . build.sh && build_make
 ```
@@ -74,4 +75,10 @@ wget http://cdn.azul.com/zulu-embedded/bin/zulu8.31.1.122-jdk1.8.0_181-linux_aar
 tar xvfz zulu8.31.1.122-jdk1.8.0_181-linux_aarch64.tar.gz 
 mv zulu8.31.1.122-jdk1.8.0_181-linux_aarch64 /opt/
 ln -s /opt/zulu8.31.1.122-jdk1.8.0_181-linux_aarch64/ /opt/jdk
+
+
+wget https://cdn.azul.com/zulu/bin/zulu8.31.0.1-jdk8.0.181-linux_x64.tar.gz
+tar xvfz zulu8.31.0.1-jdk8.0.181-linux_x64.tar.gz
+mv zulu8.31.0.1-jdk8.0.181-linux_x64 /opt/
+ln -s /opt/zulu8.31.0.1-jdk8.0.181-linux_x64 /opt/jdk
 ```

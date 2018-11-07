@@ -1,7 +1,8 @@
 export BUILD_FOLDER=build
 export URL=http://hellonico.info:8081/repository/hellonico/
 export REPOSITORYID=vendredi
-# export VERSION=4.0.0-beta1
+export CV_VERSION=4.0.0-beta
+
 arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "linux_64" "linux_32")
 
 function create_tree() {    
@@ -27,7 +28,7 @@ function build_make() {
 }
 
 function do_clone() {
-    git clone --branch $VERSION --depth 1 https://github.com/opencv/opencv.git opencv
+    git clone --branch $CV_VERSION --depth 1 https://github.com/opencv/opencv.git opencv
 }
 
 function do_clean() {
@@ -110,7 +111,7 @@ cmake \
 -D WITH_CUDA=OFF \
 -D WITH_CUFFT=OFF \
 -D WITH_EIGEN=ON \
--D WITH_FFMPEG=ON \
+-D WITH_FFMPEG=OFF \
 -D WITH_GDAL=OFF \
 -D WITH_GPHOTO2=OFF \
 -D WITH_GIGEAPI=ON \

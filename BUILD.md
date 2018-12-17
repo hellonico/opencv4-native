@@ -10,7 +10,7 @@
 
 # deploy core from local build
 ```
-. build.sh && deploy_core
+. build.sh && deploy_core 4.0.0-0
 ```
 
 # deploy all natives jar from natives folder

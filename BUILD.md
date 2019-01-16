@@ -5,6 +5,8 @@
 . build.sh && do_clone 
 . build.sh && do_clean 
 . build.sh && build_cmake
+# for a minimal opencv library file ...
+# . build.sh && build_cmake2 
 . build.sh && build_make
 ```
 
@@ -45,6 +47,12 @@ or
 
 # trouble shotting
 
+## Protocol "https" not supported or disabled in libcurl
+
+```
+sudo apt install libssl-dev 
+```
+
 ## cmake on old debian
 
 download from
@@ -52,17 +60,21 @@ download from
 https://cmake.org/files/v3.12/cmake-3.12.4.tar.gz
 
 ```
-  ./bootstrap
-  make
-  make install
+wget https://cmake.org/files/v3.12/cmake-3.12.4.tar.gz
+tar xvfz cmake-3.12.4.tar.gz 
+cd cmake-3.12.4/
+./bootstrap
+make
+make install
 ```
 
-or
+## sdkman
 
 ```
-  cmake .
-  make
-  make install
+sudo apt install zip unzip
+curl -s "https://get.sdkman.io" | bash
+source "/home/vagrant/.sdkman/bin/sdkman-init.sh"
+sdk install java  8.0.191-oracle
 ```
 
 ## openjdk, java 

@@ -138,12 +138,12 @@ cmake \
 -D WITH_PTHREADS_PF=OFF \
 -D WITH_PVAPI=ON \
 -D WITH_QT=OFF \
--D WITH_TBB=ON \
--D WITH_TIFF=ON \
+-D WITH_TBB=OFF \
+-D WITH_TIFF=OFF \
 -D WITH_UNICAP=OFF \
 -D WITH_V4L=ON \
 -D WITH_VTK=OFF \
--D WITH_WEBP=ON \
+-D WITH_WEBP=OFF \
 -D WITH_XIMEA=OFF \
 -D WITH_XINE=OFF \
 ${CV_SOURCE_DIR}
@@ -152,17 +152,62 @@ ${CV_SOURCE_DIR}
 cd ../..
 }
 
+# -D BUILD_opencv_flann=OFF \
+#     -D BUILD_opencv_video=OFF \
+#     -D BUILD_opencv_videoio=OFF \
+#     -D BUILD_opencv_dnn=OFF \
 function build_cmake2() {
-    cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    cd $CV_BUILD_DIR
+    echo $CV_BUILD_DIR
+    cmake \
+    -D CMAKE_BUILD_TYPE=RELEASE \
     -G "${GENERATOR_NAME}" \
     --build ${BUILD_DIR} \
-    -D WITH_TBB=ON \
     -D BUILD_SHARED_LIBS=OFF \
-    -D BUILD_WEBP=ON \
-    -D WITH_V4L=ON \
-    -D WITH_CUBLAS=ON \
-    -D WITH_WEBP=ON \
-    ${SOURCE_DIR}
+    -D WITH_1394=OFF \
+    -D WITH_CUBLAS=OFF \
+    -D WITH_CUDA=OFF \
+    -D WITH_CUFFT=OFF \
+    -D WITH_EIGEN=OFF \
+    -D WITH_FFMPEG=OFF \
+    -D WITH_GDAL=OFF \
+    -D WITH_GPHOTO2=OFF \
+    -D WITH_GIGEAPI=OFF \
+    -D WITH_GSTREAMER=OFF \
+    -D WITH_GTK=OFF \
+    -D WITH_INTELPERC=OFF \
+    -D WITH_IPP=OFF \
+    -D WITH_IPP_A=OFF \
+    -D WITH_JASPER=OFF \
+    -D WITH_JPEG=ON \
+    -D WITH_LIBV4L=OFF \
+    -D WITH_OPENCL=OFF \
+    -D WITH_OPENCLAMDBLAS=OFF \
+    -D WITH_OPENCLAMDFFT=OFF \
+    -D WITH_OPENCL_SVM=OFF \
+    -D WITH_OPENEXR=OFF \
+    -D WITH_OPENGL=OFF \
+    -D WITH_OPENMP=OFF \
+    -D WITH_OPENNI=OFF \
+    -D WITH_PNG=ON \
+    -D WITH_PTHREADS_PF=OFF \
+    -D WITH_PVAPI=OFF \
+    -D WITH_QT=OFF \
+    -D WITH_TBB=OFF \
+    -D WITH_TIFF=OFF \
+    -D WITH_UNICAP=OFF \
+    -D WITH_V4L=OFF \
+    -D WITH_VTK=OFF \
+    -D WITH_WEBP=OFF \
+    -D WITH_XIMEA=OFF \
+    -D WITH_XINE=OFF \
+    -D BUILD_opencv_apps=OFF \
+    -D BUILD_opencv_highgui=OFF \
+    -D BUILD_opencv_python_bindings_generator=OFF \
+    -D ENABLE_CXX=1 \
+    ${CV_SOURCE_DIR}
+
+    cd ../..
 }
 
 function version() {
@@ -174,8 +219,8 @@ function version() {
 }
 
 function linux-deps() {
-    apt update
-    apt install ant build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+    sudo apt update
+    sudo apt install ant build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
     # python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 }
 function debian-video() {
@@ -299,9 +344,3 @@ function deploy_one_jar() {
     outut_for_build opencv-native-$arch $vers
 
 }
-
-
-
-####
-#### WIP
-####

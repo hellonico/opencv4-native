@@ -48,6 +48,8 @@ function install_clj() {
     sudo apt install rlwrap
 }
 
+# https://github.com/opencv/opencv/blob/master/CMakeLists.txt
+# 
 function build_cmake() {
 cd $CV_BUILD_DIR
 echo $CV_BUILD_DIR
@@ -164,6 +166,22 @@ function build_cmake2() {
     -G "${GENERATOR_NAME}" \
     --build ${BUILD_DIR} \
     -D BUILD_SHARED_LIBS=OFF \
+    -D BUILD_CUDA_STUBS=OFF \
+    -D BUILD_DOCS=OFF \
+    -D BUILD_EXAMPLES=OFF \
+    -D BUILD_JASPER=OFF \
+    -D BUILD_JPEG=ON \
+    -D BUILD_OPENEXR=OFF \
+    -D BUILD_PACKAGE=OFF \
+    -D BUILD_PERF_TESTS=OFF \
+    -D BUILD_PNG=ON \
+    -D BUILD_SHARED_LIBS=OFF \
+    -D BUILD_TBB=OFF \
+    -D BUILD_TESTS=OFF \
+    -D BUILD_TIFF=OFF \
+    -D BUILD_WITH_DEBUG_INFO=OFF \
+    -D BUILD_ZLIB=OFF \
+    -D BUILD_WEBP=OFF \
     -D WITH_1394=OFF \
     -D WITH_CUBLAS=OFF \
     -D WITH_CUDA=OFF \
@@ -218,15 +236,22 @@ function version() {
     echo "$OS-$ARCH-$GLIBVERSION"
 }
 
+# not really needed
+# the main things required are: ant(for java) cmake (for build)
+# on older machine the cmake from the package manager is too old and 
+# needs to be compiled by hand. 
+# @see BUILD.md 
 function linux-deps() {
     sudo apt update
     sudo apt install ant build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
     # python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 }
+function linux_missing() {
+    ldd natives/linux_64/libopencv_java400.so | grep "not" | awk '{print $1}'
+}
 function debian-video() {
     apt install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav
 }
-
 function so_to_jar() {
     path_to_so=$1
     custom=$2

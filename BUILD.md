@@ -10,9 +10,10 @@
 . build.sh && build_make
 ```
 
-# deploy core from local build
+# install or deploy core from local build
 ```
-. build.sh && deploy_core 4.0.0-0
+. build.sh && install_core 4.0.1-0
+. build.sh && deploy_core 4.0.1-0
 ```
 
 # deploy all natives jar from natives folder

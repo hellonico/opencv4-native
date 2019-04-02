@@ -1,7 +1,7 @@
 export BUILD_FOLDER=build
 export URL=http://hellonico.info:8081/repository/hellonico/
 export REPOSITORYID=vendredi
-export CV_VERSION=4.0.0
+export CV_VERSION=4.0.1
 
 arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "linux_64" "linux_32")
 
@@ -57,7 +57,8 @@ cmake \
 -D CMAKE_BUILD_TYPE=RELEASE \
 -G "${GENERATOR_NAME}" \
 --build ${BUILD_DIR} \
--D OPENCV_EXTRA_MODULES_PATH=$CV_SOURCE_DIR/../opencv_contrib/modules/xfeatures2d \
+-D OPENCV_EXTRA_MODULES_PATH=$CV_SOURCE_DIR/../opencv_contrib/modules \
+-D OPENCV_ENABLE_MODULES=calib3d,core,dnn,features2d,flann,gapi,highgui,imgcodecs,imgproc,java,java_bindings_generator,ml,objdetect,photo,stitching,ts,video,videoio,xfeature2d,xphoto \
 -D OPENCV_ENABLE_NONFREE=ON \
 -D BUILD_CUDA_STUBS=OFF \
 -D BUILD_DOCS=ON \
@@ -198,7 +199,7 @@ function build_cmake2() {
     -D WITH_IPP_A=OFF \
     -D WITH_JASPER=OFF \
     -D WITH_JPEG=ON \
-    -D WITH_LIBV4L=OFF \
+    -D WITH_LIBV4L=ON \
     -D WITH_OPENCL=OFF \
     -D WITH_OPENCLAMDBLAS=OFF \
     -D WITH_OPENCLAMDFFT=OFF \
@@ -214,7 +215,7 @@ function build_cmake2() {
     -D WITH_TBB=OFF \
     -D WITH_TIFF=OFF \
     -D WITH_UNICAP=OFF \
-    -D WITH_V4L=OFF \
+    -D WITH_V4L=ON \
     -D WITH_VTK=OFF \
     -D WITH_WEBP=OFF \
     -D WITH_XIMEA=OFF \
@@ -313,11 +314,12 @@ function build_native_jars() {
 
 function install_core() {
     path_to_jar=`find opencv/build/bin -name *.jar`
+    vers=$1
     echo "> $path_to_jar"
     mvn install:install-file \
     -DgroupId=opencv \
     -DartifactId=opencv \
-    -Dversion=$VERSION \
+    -Dversion=$vers \
     -Dpackaging=jar \
     -Dfile=$path_to_jar
 }

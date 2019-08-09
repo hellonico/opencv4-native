@@ -12,13 +12,13 @@
 
 # install or deploy core from local build
 ```
-. build.sh && install_core 4.0.1-0
-. build.sh && deploy_core 4.0.1-0
+. build.sh && install_core 4.1.1-0
+. build.sh && deploy_core 4.1.1-0
 ```
 
 # deploy all natives jar from natives folder
 ```
-. build.sh && deploy_native
+. build.sh && deploy_native 4.1.1-0
 ```
 
 # install native jar from local .so

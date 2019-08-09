@@ -1,7 +1,7 @@
 export BUILD_FOLDER=build
 export URL=http://hellonico.info:8081/repository/hellonico/
 export REPOSITORYID=vendredi
-export CV_VERSION=4.0.1
+export CV_VERSION=4.1.1
 
 arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "linux_64" "linux_32")
 
@@ -121,7 +121,7 @@ cmake \
 -D WITH_GDAL=OFF \
 -D WITH_GPHOTO2=OFF \
 -D WITH_GIGEAPI=ON \
--D WITH_GSTREAMER=ON \
+-D WITH_GSTREAMER=OFF \
 -D WITH_GTK=ON \
 -D WITH_INTELPERC=OFF \
 -D WITH_IPP=ON \

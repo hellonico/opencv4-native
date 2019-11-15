@@ -176,6 +176,7 @@ function build_cmake2() {
     -D BUILD_PACKAGE=OFF \
     -D BUILD_PERF_TESTS=OFF \
     -D BUILD_PNG=ON \
+    -D BUILD_FFMPEG=ON \
     -D BUILD_SHARED_LIBS=OFF \
     -D BUILD_TBB=OFF \
     -D BUILD_TESTS=OFF \
@@ -188,7 +189,7 @@ function build_cmake2() {
     -D WITH_CUDA=OFF \
     -D WITH_CUFFT=OFF \
     -D WITH_EIGEN=OFF \
-    -D WITH_FFMPEG=OFF \
+    -D WITH_FFMPEG=ON \
     -D WITH_GDAL=OFF \
     -D WITH_GPHOTO2=OFF \
     -D WITH_GIGEAPI=OFF \
@@ -221,7 +222,7 @@ function build_cmake2() {
     -D WITH_XIMEA=OFF \
     -D WITH_XINE=OFF \
     -D BUILD_opencv_apps=OFF \
-    -D BUILD_opencv_highgui=OFF \
+    -D BUILD_opencv_highgui=ON \
     -D BUILD_opencv_python_bindings_generator=OFF \
     -D ENABLE_CXX=1 \
     ${CV_SOURCE_DIR}

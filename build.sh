@@ -1,7 +1,7 @@
 export BUILD_FOLDER=build
 export URL=http://hellonico.info:8081/repository/hellonico/
 export REPOSITORYID=vendredi
-export CV_VERSION=4.1.1
+export CV_VERSION=4.1.2
 
 arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "linux_64" "linux_32")
 
@@ -61,7 +61,7 @@ cmake \
 -D OPENCV_ENABLE_MODULES=calib3d,core,dnn,features2d,flann,gapi,highgui,imgcodecs,imgproc,java,java_bindings_generator,ml,objdetect,photo,stitching,ts,video,videoio,xfeature2d,xphoto \
 -D OPENCV_ENABLE_NONFREE=ON \
 -D BUILD_CUDA_STUBS=OFF \
--D BUILD_DOCS=ON \
+-D BUILD_DOCS=OFF \
 -D BUILD_EXAMPLES=OFF \
 -D BUILD_JASPER=ON \
 -D BUILD_JPEG=ON \
@@ -101,11 +101,11 @@ cmake \
 -D BUILD_opencv_objdetect=ON \
 -D BUILD_opencv_photo=ON \
 -D BUILD_opencv_python2=OFF \
--D BUILD_opencv_python3=ON \
+-D BUILD_opencv_python3=OFF \
 -D BUILD_opencv_shape=ON \
 -D BUILD_opencv_stitching=ON \
 -D BUILD_opencv_superres=ON \
--D BUILD_opencv_ts=ON \
+-D BUILD_opencv_ts=OFF \
 -D BUILD_opencv_video=ON \
 -D BUILD_opencv_videoio=ON \
 -D BUILD_opencv_videostab=ON \
@@ -138,7 +138,7 @@ cmake \
 -D WITH_OPENMP=OFF \
 -D WITH_OPENNI=OFF \
 -D WITH_PNG=ON \
--D WITH_PTHREADS_PF=OFF \
+-D WITH_PTHREADS_PF=ON \
 -D WITH_PVAPI=ON \
 -D WITH_QT=OFF \
 -D WITH_TBB=OFF \
@@ -268,6 +268,15 @@ function so_to_jar() {
 
     cp $path_to_so natives/$ARCH/libopencv_java400.so
     jar cvf $target_file natives/$ARCH
+}
+
+function install_native_jar() {
+    mvn install:install-file \
+    -DgroupId=opencv \
+    -DartifactId=opencv-native \
+    -Dversion=$1 \
+    -Dpackaging=jar \
+    -Dfile=build/opencv-native.jar
 }
 
 function install_so() {

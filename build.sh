@@ -1,7 +1,7 @@
 export BUILD_FOLDER=build
 export URL=http://hellonico.info:8081/repository/hellonico/
 export REPOSITORYID=vendredi
-export CV_VERSION=4.3.0
+export CV_VERSION=4.5.0
 
 arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "linux_64" "linux_32")
 

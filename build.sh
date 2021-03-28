@@ -1,9 +1,9 @@
 export BUILD_FOLDER=build
 export URL=http://hellonico.info:8081/repository/hellonico/
 export REPOSITORYID=vendredi
-export CV_VERSION=4.5.0
+export CV_VERSION=4.5.1
 
-arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "linux_64" "linux_32")
+arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "osx_arm64" "linux_64" "linux_32")
 
 function create_tree() {    
     for i in "${arch[@]}"
@@ -31,12 +31,12 @@ function do_make() {
 function do_clone() {
     git clone --branch $CV_VERSION --depth 1 https://github.com/opencv/opencv.git opencv
     git clone --branch $CV_VERSION --depth 1 https://github.com/opencv/opencv_contrib.git opencv_contrib
-    do_clean
+    # do_clean
 }
 
 function do_clean() {
     rm -fr $CV_BUILD_DIR
-    rm -fr `realpath opencv_contrib`
+    # rm -fr `realpath opencv_contrib`
     mkdir -p $CV_BUILD_DIR
     echo $CV_BUILD_DIR
 }
@@ -421,13 +421,14 @@ function  check_so_lib() {
 function build_native_jars() {
     for i in "${arch[@]}"
     do
+      echo "building $i"
       jar cvf $BUILD_FOLDER/opencv-native-$i.jar natives/$i
     done
     jar cvf $BUILD_FOLDER/opencv-native.jar natives/*
 }
 
 function install_core() {
-    path_to_jar=`find opencv/build/bin -name *.jar`
+    path_to_jar=`find opencv/build/bin -name "*.jar"`
     vers=$1
     echo "> $path_to_jar"
     mvn install:install-file \
@@ -439,7 +440,7 @@ function install_core() {
 }
 
 function deploy_core() {
-    path_to_jar=`find opencv/build/bin -name *.jar`
+    path_to_jar=`find opencv/build/bin -name "*.jar"`
     echo "> $path_to_jar"
     vers=$1
     mvn deploy:deploy-file -DgroupId=opencv \

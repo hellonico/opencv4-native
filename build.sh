@@ -1,7 +1,7 @@
 export BUILD_FOLDER=build
 export URL=http://hellonico.info:8081/repository/hellonico/
 export REPOSITORYID=vendredi
-export CV_VERSION=4.5.1
+export CV_VERSION=4.5.3
 
 arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "osx_arm64" "linux_64" "linux_32")
 
@@ -31,7 +31,7 @@ function do_make() {
 function do_clone() {
     git clone --branch $CV_VERSION --depth 1 https://github.com/opencv/opencv.git opencv
     git clone --branch $CV_VERSION --depth 1 https://github.com/opencv/opencv_contrib.git opencv_contrib
-    # do_clean
+    do_clean
 }
 
 function do_clean() {

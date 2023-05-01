@@ -1,7 +1,14 @@
+#! /opt/homebrew/bin/bash 
+
 export BUILD_FOLDER=build
+# export BUILD_DIR=build
 export URL=http://hellonico.info:8081/repository/hellonico/
 export REPOSITORYID=vendredi
-export CV_VERSION=4.5.3
+export CV_VERSION=4.7.0
+
+export CV_SOURCE_DIR=`realpath opencv`
+export CV_BUILD_DIR=$CV_SOURCE_DIR/build
+export GENERATOR_NAME="Unix Makefiles"
 
 arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "osx_arm64" "linux_64" "linux_32")
 
@@ -18,9 +25,6 @@ function realpath() {
     [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
 }
 
-export CV_SOURCE_DIR=`realpath opencv`
-export CV_BUILD_DIR=$CV_SOURCE_DIR/build
-export GENERATOR_NAME="Unix Makefiles"
 
 function do_make() {
     cd $CV_BUILD_DIR
@@ -56,10 +60,9 @@ function install_clj() {
 function do_cmake_nix() {
 cd $CV_BUILD_DIR
 echo $CV_BUILD_DIR
-cmake \
--D CMAKE_BUILD_TYPE=RELEASE \
+# echo $BUILD_DIR
+cmake -B $CV_BUILD_DIR -D CMAKE_BUILD_TYPE=RELEASE \
 -G "${GENERATOR_NAME}" \
---build ${BUILD_DIR} \
 -D OPENCV_EXTRA_MODULES_PATH=$CV_SOURCE_DIR/../opencv_contrib/modules \
 -D OPENCV_ENABLE_MODULES=calib3d,core,dnn,features2d,flann,gapi,highgui,imgcodecs,imgproc,java,java_bindings_generator,ml,objdetect,photo,stitching,ts,video,videoio,xfeature2d,xphoto \
 -D OPENCV_ENABLE_NONFREE=ON \
@@ -152,7 +155,7 @@ cmake \
 -D WITH_WEBP=OFF \
 -D WITH_XIMEA=OFF \
 -D WITH_XINE=OFF \
-${CV_SOURCE_DIR}
+-S ${CV_SOURCE_DIR}
 
 
 cd ../..
@@ -164,7 +167,7 @@ function do_cmake_arm() {
     cmake \
     -D CMAKE_BUILD_TYPE=RELEASE \
     -G "${GENERATOR_NAME}" \
-    --build ${BUILD_DIR} \
+    --build ${CV_BUILD_DIR} \
     -D BUILD_SHARED_LIBS=OFF \
     -D BUILD_CUDA_STUBS=OFF \
     -D BUILD_DOCS=OFF \
@@ -235,7 +238,7 @@ echo $CV_BUILD_DIR
 cmake \
 -D CMAKE_BUILD_TYPE=RELEASE \
 -G "${GENERATOR_NAME}" \
---build ${BUILD_DIR} \
+--build ${CV_BUILD_DIR} \
 -D OPENCV_EXTRA_MODULES_PATH=$CV_SOURCE_DIR/../opencv_contrib/modules \
 -D OPENCV_ENABLE_MODULES=calib3d,core,cudev,dnn,features2d,flann,gapi,highgui,imgcodecs,imgproc,java,java_bindings_generator,ml,objdetect,photo,stitching,ts,video,videoio,xfeature2d,xphoto \
 -D OPENCV_ENABLE_NONFREE=ON \

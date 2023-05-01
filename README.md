@@ -18,14 +18,14 @@
 
 # install or deploy core from local build
 ```
-. build.sh && install_core 4.3.0-0
-. build.sh && deploy_core 4.3.0-0
+. build.sh && install_core 4.7.0-0
+. build.sh && deploy_core 4.7.0-0
 ```
 
 # build and deploy all native jars from natives folder
 
 ```
 . build.sh && build_native_jars
-. build.sh && install_native 4.3.0-0
-. build.sh && deploy_native 4.3.0-0
+. build.sh && install_native_jar 4.7.0-0
+. build.sh && deploy_native 4.7.0-0
 ```

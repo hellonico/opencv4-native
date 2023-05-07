@@ -261,8 +261,8 @@ cmake \
 -D BUILD_opencv_apps=ON \
 -D BUILD_opencv_calib3d=ON \
 -D BUILD_opencv_core=ON \
--D BUILD_opencv_cudaarithm=OFF \
--D BUILD_opencv_cudabgsegm=O \
+-D BUILD_opencv_cudaarithm=ON \
+-D BUILD_opencv_cudabgsegm=ON \
 -D BUILD_opencv_cudacodec=ON \
 -D BUILD_opencv_cudafeatures2d=ON \
 -D BUILD_opencv_cudafilters=ON \
@@ -271,7 +271,7 @@ cmake \
 -D BUILD_opencv_cudaobjdetect=ON \
 -D BUILD_opencv_cudaoptflow=ON \
 -D BUILD_opencv_cudastereo=ON \
--D BUILD_opencv_intensity_transform=OFF \
+-D BUILD_opencv_intensity_transform=ON \
 -D BUILD_opencv_cudawarping=ON \
 -D BUILD_opencv_cudev=ON \
 -D BUILD_opencv_features2d=ON \

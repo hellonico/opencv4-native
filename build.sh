@@ -179,7 +179,6 @@ function do_cmake_arm() {
     -D BUILD_PERF_TESTS=OFF \
     -D BUILD_PNG=ON \
     -D BUILD_FFMPEG=ON \
-    -D BUILD_SHARED_LIBS=OFF \
     -D BUILD_TBB=OFF \
     -D BUILD_TESTS=OFF \
     -D BUILD_TIFF=OFF \

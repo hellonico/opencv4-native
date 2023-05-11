@@ -1,34 +1,33 @@
-say_hello:
-	echo "Hello World"
+.DEFAULT_GOAL := hello
 
-export CV_VERSION=4.7.0
-export CV_SOURCE_DIR=`realpath opencv`
-export CV_BUILD_DIR=${CV_SOURCE_DIR/build}
-export GENERATOR_NAME="Unix Makefiles"
-export BUILD_FOLDER=build
+CV_VERSION := 4.7.0
+CV_SOURCE_DIR := opencv
+CV_BUILD_DIR := opencv/build
+GENERATOR_NAME := "UnixMakefiles"
+BUILD_FOLDER := build
 
-export arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "osx_arm64" "linux_64" "linux_32")
+arch := ("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "osx_arm64" "linux_64" "linux_32")
 
-clean:
-	 rm -fr opencv/ opencv_contrib/
-
-clone: clean
+clone:
+	rm -fr opencv/ opencv_contrib/
 	git clone --branch ${CV_VERSION} --depth 1 https://github.com/opencv/opencv.git opencv
 	git clone --branch ${CV_VERSION} --depth 1 https://github.com/opencv/opencv_contrib.git opencv_contrib
 
 clean: clone
-	rm -fr ${CV_BUILD_DIR}
 	mkdir -p ${CV_BUILD_DIR}
-	echo "${CV_BUILD_DIR} clean" 
+	echo "${CV_BUILD_DIR} clean"
+
+hello:
+	echo $(CV_BUILD_DIR) 
+	echo $(CV_SOURCE_DIR)
+	echo $(GENERATOR_NAME)
 
 cmake_nix: 
-	cd ${CV_BUILD_DIR}
-	echo ${CV_BUILD_DIR}
+	cd $(CV_BUILD_DIR)
 	cmake \
 	-D CMAKE_BUILD_TYPE=RELEASE \
-	-G "${GENERATOR_NAME}" \
-	--build ${CV_BUILD_DIR} \
-	-D OPENCV_EXTRA_MODULES_PATH=${CV_SOURCE_DIR}/../opencv_contrib/modules \
+	-B $(CV_BUILD_DIR) \
+	-D OPENCV_EXTRA_MODULES_PATH=$(CV_SOURCE_DIR)/../opencv_contrib/modules \
 	-D OPENCV_ENABLE_MODULES=calib3d,core,dnn,features2d,flann,gapi,highgui,imgcodecs,imgproc,java,java_bindings_generator,ml,objdetect,photo,stitching,ts,video,videoio,xfeature2d,xphoto \
 	-D OPENCV_ENABLE_NONFREE=ON \
 	-D BUILD_CUDA_STUBS=OFF \
@@ -43,10 +42,10 @@ cmake_nix:
 	-D BUILD_SHARED_LIBS=OFF \
 	-D BUILD_TBB=OFF \
 	-D BUILD_TESTS=OFF \
-	-D BUILD_TIFF=OFF \
+	-D BUILD_TIFF=ON \
 	-D BUILD_WITH_DEBUG_INFO=OFF \
 	-D BUILD_ZLIB=OFF \
-	-D BUILD_WEBP=OFF \
+	-D BUILD_WEBP=ON \
 	-D BUILD_opencv_apps=ON \
 	-D BUILD_opencv_calib3d=ON \
 	-D BUILD_opencv_core=ON \
@@ -93,9 +92,9 @@ cmake_nix:
 	-D WITH_GPHOTO2=OFF \
 	-D WITH_GIGEAPI=ON \
 	-D WITH_GSTREAMER=OFF \
-	-D WITH_GTK=ON \
+	-D WITH_GTK=OFF \
 	-D WITH_INTELPERC=OFF \
-	-D WITH_IPP=ON \
+	-D WITH_IPP=OFF \
 	-D WITH_IPP_A=OFF \
 	-D WITH_JASPER=ON \
 	-D WITH_JPEG=ON \
@@ -120,18 +119,10 @@ cmake_nix:
 	-D WITH_WEBP=OFF \
 	-D WITH_XIMEA=OFF \
 	-D WITH_XINE=OFF \
-	${CV_SOURCE_DIR}
+	$(CV_SOURCE_DIR)
 	cd ../..
+
 
 build:
 	cd ${CV_BUILD_DIR}
-	# make -j $(($(nproc) + 1))
-	make -j 4  
-
-native-jar:
-	for i in "${arch[@]}"
-	do
-		echo "building $i"
-		jar cvf ${BUILD_FOLDER}/opencv-native-$i.jar natives/$i
-	done
-	jar cvf ${BUILD_FOLDER}/opencv-native.jar natives/*
+	make -j4 

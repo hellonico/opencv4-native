@@ -2,15 +2,15 @@
 
 export BUILD_FOLDER=build
 # export BUILD_DIR=build
-export URL=http://hellonico.info:8081/repository/hellonico/
+export URL=http://repository.hellonico.info/repository/hellonico/
 export REPOSITORYID=vendredi
-export CV_VERSION=4.7.0
+export CV_VERSION=4.9.0
 
 export CV_SOURCE_DIR=`realpath opencv`
 export CV_BUILD_DIR=$CV_SOURCE_DIR/build
 export GENERATOR_NAME="Unix Makefiles"
 
-arch=("linux_arm" "linux_arm64" "windows_64" "windows_32" "osx_64" "osx_arm64" "linux_64" "linux_32")
+arch=("linux_arm" "linux_arm64" "linux_arm64_nvidia" "windows_64" "windows_32" "osx_64" "osx_arm64" "linux_64" "linux_32")
 
 function create_tree() {    
     for i in "${arch[@]}"

@@ -164,10 +164,11 @@ cd ../..
 function do_cmake_arm() {
     cd $CV_BUILD_DIR
     echo $CV_BUILD_DIR
+    echo $GENERATOR_NAME
     cmake \
     -D CMAKE_BUILD_TYPE=RELEASE \
     -G "${GENERATOR_NAME}" \
-    --build ${CV_BUILD_DIR} \
+    -B $CV_BUILD_DIR -D CMAKE_BUILD_TYPE=RELEASE \
     -D BUILD_SHARED_LIBS=OFF \
     -D BUILD_CUDA_STUBS=OFF \
     -D BUILD_DOCS=OFF \
@@ -235,9 +236,8 @@ function do_cmake_cuda() {
 cd $CV_BUILD_DIR
 echo $CV_BUILD_DIR
 cmake \
--D CMAKE_BUILD_TYPE=RELEASE \
 -G "${GENERATOR_NAME}" \
---build ${CV_BUILD_DIR} \
+-B $CV_BUILD_DIR -D CMAKE_BUILD_TYPE=RELEASE \
 -D OPENCV_EXTRA_MODULES_PATH=$CV_SOURCE_DIR/../opencv_contrib/modules \
 -D OPENCV_ENABLE_MODULES=calib3d,core,cudev,dnn,features2d,flann,gapi,highgui,imgcodecs,imgproc,java,java_bindings_generator,ml,objdetect,photo,stitching,ts,video,videoio,xfeature2d,xphoto \
 -D OPENCV_ENABLE_NONFREE=ON \

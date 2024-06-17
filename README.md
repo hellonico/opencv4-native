@@ -30,3 +30,13 @@
 . build.sh && install_native_jar 4.9.0-0
 . build.sh && deploy_native 4.9.0-0
 ```
+
+
+# with make
+
+```
+make clean
+make clone
+make cmake_nix
+make do_make
+```

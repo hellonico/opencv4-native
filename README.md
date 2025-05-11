@@ -37,6 +37,12 @@
 ```
 make clean
 make clone
-make cmake_nix
+# make cmake_nix
+make cmake_osx
 make do_make
+
+make copy_native myarch=osx_arm64
+make deploy_core vers=4.11.0-0
+make build_native_jars
+make deploy_native vers=4.11.0-0
 ```

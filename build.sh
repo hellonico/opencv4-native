@@ -1,10 +1,10 @@
-#! /opt/homebrew/bin/bash 
+#! /bin/bash 
 
 export BUILD_FOLDER=build
 # export BUILD_DIR=build
 export URL=http://repository.hellonico.info/repository/hellonico/
 export REPOSITORYID=vendredi
-export CV_VERSION=4.9.0
+export CV_VERSION=4.11.0
 
 export CV_SOURCE_DIR=`realpath opencv`
 export CV_BUILD_DIR=$CV_SOURCE_DIR/build

@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := hello
 
-CV_VERSION := 4.9.0
+CV_VERSION := 4.11.0
 
 ORIGAMI_EXTRA_VERSION=2
 FINAL_VERSION=${CV_VERSION}-${ORIGAMI_EXTRA_VERSION}
@@ -129,6 +129,7 @@ cmake_osx:
 	-D WITH_VTK=OFF \
 	-D WITH_WEBP=ON \
 	-D WITH_XIMEA=OFF \
+	-D WITH_OBSENSOR=OFF \
 	-D WITH_XINE=OFF \
 	$(CV_SOURCE_DIR)
 	cd ../..
@@ -233,3 +234,54 @@ deploy_native_jars:
     -Durl=${URL}
 
 # osx: clone cmake_nix do_make native_jars
+
+# make deploy_core vers=4.11.0
+.PHONY: deploy_core
+deploy_core:
+	@path_to_jar=$$(find opencv/build/bin -name "*.jar"); \
+	echo "> $$path_to_jar"; \
+	mvn deploy:deploy-file \
+		-DgroupId=opencv \
+		-DartifactId=opencv \
+		-Dversion=$(vers) \
+		-Dpackaging=jar \
+		-Dfile=$$path_to_jar \
+		-DrepositoryId=$(REPOSITORYID) \
+		-Durl=$(URL)
+
+
+.PHONY: build_native_jars
+build_native_jars:
+	@for i in $(arch); do \
+		echo "building $$i"; \
+		jar cvf $(BUILD_FOLDER)/opencv-native-$$i.jar natives/$$i; \
+	done; \
+	jar cvf $(BUILD_FOLDER)/opencv-native.jar natives/*
+
+.PHONY: deploy_native
+deploy_native:
+	@vers=${vers}; \
+	[ -z "$$vers" ] && vers=$(CV_VERSION); \
+	mvn deploy:deploy-file \
+		-DgroupId=opencv \
+		-DartifactId=opencv-native \
+		-Dversion=$$vers \
+		-Dfile=$(BUILD_FOLDER)/opencv-native.jar \
+		-Dclassifiers=osx_64,linux_64,windows_64,linux_arm64 \
+		-Dfiles=$(BUILD_FOLDER)/opencv-native-osx_64.jar,$(BUILD_FOLDER)/opencv-native-linux_64.jar,$(BUILD_FOLDER)/opencv-native-windows_64.jar,$(BUILD_FOLDER)/opencv-native-linux_arm64.jar \
+		-Dtypes=jar,jar,jar,jar \
+		-Dpackaging=jar \
+		-DrepositoryId=$(REPOSITORYID) \
+		-Durl=$(URL)
+
+.PHONY: copy_native
+copy_native:
+	@arch=${myarch}; \
+	[ -z "$$arch" ] && echo "Error: myarch is not specified" && exit 1; \
+	libfile=$$(find opencv/build -name "libopencv_java*" | head -n 1); \
+	[ -z "$$libfile" ] && echo "Error: libopencv_java* not found" && exit 1; \
+	dest_dir=$$(pwd)/natives/$$arch; \
+	echo "Found: $$libfile"; \
+	echo "Copying to: $$dest_dir"; \
+	mkdir -p "$$dest_dir"; \
+	cp -v "$$libfile" "$$dest_dir"/

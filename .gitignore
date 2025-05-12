@@ -4,3 +4,6 @@ sos/
 opencv_contrib/
 natives.47/
 natives.bak/
+history
+natives-backup
+history.sh

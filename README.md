@@ -1,42 +1,54 @@
-# regular course
+# OpenCV 4 Native Release Workflow
 
-```
-# first time building 
+This project builds the OpenCV Java wrapper and Native libraries for Origami.
 
-. build.sh && linux-deps
+**Note:** `build.sh` is deprecated. Please use the `Makefile` for all build operations.
 
-# update version in build.sh
-. build.sh && do_clone 
-. build.sh && do_clean 
-# make sure of java version
-. build.sh && do_cmake_nix
-# for a minimal opencv library file ...
-# . build.sh && do_cmake_arm 
-# for a jetson
-# . build.sh && do_cmake_cuda
-. build.sh && do_make
-```
+## Architecture
 
-# install or deploy core from local build
-```
-. build.sh && install_core 4.9.0-0
-. build.sh && deploy_core 4.9.0-0
-```
+The project uses a two-step "Harvest & Deploy" workflow to support multiple architectures (Linux/macOS/Windows, x86/ARM) from a single repo.
 
-# build and deploy all native jars from natives folder
+1.  **Harvest**: When you build on a specific machine (e.g., macOS ARM64), the resulting native library (`libopencv_java*.dylib`) is copied into `natives/osx_arm64/`.
+2.  **Commit**: You commit this binary to the repository. The `natives/` folder acts as the source of truth for all supported architectures.
+3.  **Deploy**: The deployment step packages **everything** currently in `natives/` into a single `opencv-native.jar` (and per-arch jars) and uploads them to the Maven repository.
 
-```
-. build.sh && build_native_jars
-. build.sh && install_native_jar 4.9.0-0
-. build.sh && deploy_native 4.9.0-0
+## Commands
+
+### Full Release (Build + Deploy Core & Natives)
+
+Builds the current architecture from source, updates `natives/`, and deploys everything.
+
+```bash
+make release
 ```
 
+### Native-Only Release
 
-# with make
+If you only want to add a new architecture's binary (or update an existing one) without rebuilding the Java Core:
 
+```bash
+make release-natives
 ```
-make clean
-make clone
-make cmake_nix
-make do_make
-```
+
+### Cleaning
+
+- `make clean`: Removes build artifacts (`build/`, `opencv/build`).
+- `make deep-clean`: Removes build artifacts and source folders (`opencv/`, `opencv_contrib/`). **Does NOT remove `natives/`**.
+
+## How to Add a New Architecture
+
+1.  Clone this repo on the new machine (e.g., a Raspberry Pi or Windows box).
+2.  Run `make release-natives`.
+    - This will compile OpenCV for that machine.
+    - It will place the shared library in `natives/<os>_<arch>/`.
+    - It will upload the updated `opencv-native.jar` to the repo.
+3.  **Commit and Push** the new file in `natives/` so others can use it.
+
+## Prerequisites
+
+- CMake
+- Java JDK
+- Maven (with `settings.xml` configured for `vendredi` repo)
+- Ant
+- Git
+- Build essentials (make, gcc, etc.)

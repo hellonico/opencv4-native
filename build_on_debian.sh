@@ -39,8 +39,11 @@ vercomp () {
 if command -v python3 &> /dev/null; then
     PY_VER=$(python3 -c 'import sys; print("%d.%d" % (sys.version_info.major, sys.version_info.minor))')
     echo "Found Python: $PY_VER"
+    set +e
     vercomp $PY_VER "3.6"
-    if [[ $? == 2 ]]; then
+    RES=$?
+    set -e
+    if [[ $RES == 2 ]]; then
         echo "WARNING: Python $PY_VER is older than 3.6. OpenCV build scripts using f-strings WILL FAIL."
         echo "Attempting to continue, but 'gen_java.py' errors are expected."
     fi

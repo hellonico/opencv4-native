@@ -18,6 +18,19 @@ else
 fi
 echo "Using downloader: $DL_CMD (binary)"
 
+# 2. Python Check (Crucial for OpenCV bindings)
+if command -v python3 &> /dev/null; then
+    PY_VER=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+    echo "Found Python: $PY_VER"
+    vercomp $PY_VER "3.6"
+    if [[ $? == 2 ]]; then
+        echo "WARNING: Python $PY_VER is older than 3.6. OpenCV build scripts using f-strings WILL FAIL."
+        echo "Attempting to continue, but 'gen_java.py' errors are expected."
+    fi
+else
+    echo "WARNING: python3 not found. Build may fail."
+fi
+
 # Version comparison function (returns 0=equal, 1=ver1>ver2, 2=ver1<ver2)
 vercomp () {
     if [[ $1 == $2 ]]; then return 0; fi
@@ -137,6 +150,8 @@ cmake \
     -D BUILD_WITH_DEBUG_INFO=OFF \
     -D BUILD_ZLIB=OFF \
     -D BUILD_WEBP=OFF \
+    -D WITH_ADE=OFF \
+    -D BUILD_opencv_gapi=OFF \
     -D WITH_1394=OFF \
     -D WITH_CUBLAS=OFF \
     -D WITH_CUDA=OFF \

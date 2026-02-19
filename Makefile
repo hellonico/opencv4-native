@@ -51,8 +51,8 @@ package-native: deep-clean clone configure build harvest
 
 # Shortcut for building on old/legacy systems (delegates to script)
 package-native-legacy:
-	chmod +x build_on_debian.sh
-	./build_on_debian.sh
+	chmod +x build_legacy.sh
+	./build_legacy.sh
 
 deep-clean:
 	rm -fr $(CV_SOURCE_DIR) opencv_contrib $(BUILD_FOLDER)

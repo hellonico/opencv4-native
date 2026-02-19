@@ -20,7 +20,7 @@ echo "Using downloader: $DL_CMD (binary)"
 
 # 2. Python Check (Crucial for OpenCV bindings)
 if command -v python3 &> /dev/null; then
-    PY_VER=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+    PY_VER=$(python3 -c 'import sys; print("%d.%d" % (sys.version_info.major, sys.version_info.minor))')
     echo "Found Python: $PY_VER"
     vercomp $PY_VER "3.6"
     if [[ $? == 2 ]]; then

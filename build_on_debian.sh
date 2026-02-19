@@ -36,35 +36,48 @@ vercomp () {
 }
 
 # 2. Python Check (Crucial for OpenCV bindings)
+NEED_PYTHON=0
 if command -v python3 &> /dev/null; then
     PY_VER=$(python3 -c 'import sys; print("%d.%d" % (sys.version_info.major, sys.version_info.minor))')
-    echo "Found Python: $PY_VER"
-    set +e
-    vercomp $PY_VER "3.6"
-    RES=$?
-    set -e
-    if [[ $RES == 2 ]]; then
-        echo "WARNING: Python $PY_VER is older than 3.6. Installing portable Python 3.8 (Miniconda)..."
-        
-        # Install Miniconda to local tools dir
-        MINICONDA_DIR="$TOOLS_DIR/miniconda3"
-        if [ ! -d "$MINICONDA_DIR" ]; then
+    echo "Found Python detection: $PY_VER"
+    
+    # Check if >= 3.6 using python itself (more robust)
+    if python3 -c "import sys; exit(0 if sys.version_info >= (3, 6) else 1)"; then
+        echo "Python is suitable (>= 3.6)."
+    else
+        echo "Python $PY_VER is too old (< 3.6)."
+        NEED_PYTHON=1
+    fi
+else
+    echo "Python3 not found."
+    NEED_PYTHON=1
+fi
+
+if [[ $NEED_PYTHON == 1 ]]; then
+    echo "Installing portable Python 3.8 (Miniconda)..."
+    
+    # Install Miniconda to local tools dir
+    MINICONDA_DIR="$TOOLS_DIR/miniconda3"
+    
+    # Setup if not exists
+    if [ ! -f "$MINICONDA_DIR/bin/python3" ]; then
+        if [ ! -f "$TOOLS_DIR/miniconda.sh" ]; then
             echo "Downloading Miniconda..."
             $DL_CMD "$TOOLS_DIR/miniconda.sh" https://repo.anaconda.com/miniconda/Miniconda3-py38_23.3.1-0-Linux-x86_64.sh
-            bash "$TOOLS_DIR/miniconda.sh" -b -u -p "$MINICONDA_DIR"
-            rm "$TOOLS_DIR/miniconda.sh"
         fi
-        
-        # Add to PATH
-        export PATH="$MINICONDA_DIR/bin:$PATH"
-        echo "Now using Python: $(python3 --version)"
-        
-        # Install numpy (needed for bindings generator)
+        echo "Installing Miniconda..."
+        bash "$TOOLS_DIR/miniconda.sh" -b -u -p "$MINICONDA_DIR"
+    fi
+    
+    # Add to PATH
+    export PATH="$MINICONDA_DIR/bin:$PATH"
+    echo "UPGRADED Python: $(python3 --version)"
+    
+    # Install numpy
+    if ! python3 -c "import numpy" &> /dev/null; then
         echo "Installing numpy..."
         pip install numpy
     fi
-else
-    echo "WARNING: python3 not found. Build may fail."
 fi
 
 

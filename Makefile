@@ -49,6 +49,11 @@ release-natives: harvest deploy-natives
 package-native: deep-clean clone configure build harvest
 	@echo "Native library built and placed in $(NATIVES_FOLDER)/$(CURRENT_ARCH)"
 
+# Shortcut for building on old/legacy systems (delegates to script)
+package-native-legacy:
+	chmod +x build_on_debian.sh
+	./build_on_debian.sh
+
 deep-clean:
 	rm -fr $(CV_SOURCE_DIR) opencv_contrib $(BUILD_FOLDER)
 	# We do NOT remove $(NATIVES_FOLDER) as it holds the accumulated binaries

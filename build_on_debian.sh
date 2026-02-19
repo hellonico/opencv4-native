@@ -44,8 +44,24 @@ if command -v python3 &> /dev/null; then
     RES=$?
     set -e
     if [[ $RES == 2 ]]; then
-        echo "WARNING: Python $PY_VER is older than 3.6. OpenCV build scripts using f-strings WILL FAIL."
-        echo "Attempting to continue, but 'gen_java.py' errors are expected."
+        echo "WARNING: Python $PY_VER is older than 3.6. Installing portable Python 3.8 (Miniconda)..."
+        
+        # Install Miniconda to local tools dir
+        MINICONDA_DIR="$TOOLS_DIR/miniconda3"
+        if [ ! -d "$MINICONDA_DIR" ]; then
+            echo "Downloading Miniconda..."
+            $DL_CMD "$TOOLS_DIR/miniconda.sh" https://repo.anaconda.com/miniconda/Miniconda3-py38_23.3.1-0-Linux-x86_64.sh
+            bash "$TOOLS_DIR/miniconda.sh" -b -u -p "$MINICONDA_DIR"
+            rm "$TOOLS_DIR/miniconda.sh"
+        fi
+        
+        # Add to PATH
+        export PATH="$MINICONDA_DIR/bin:$PATH"
+        echo "Now using Python: $(python3 --version)"
+        
+        # Install numpy (needed for bindings generator)
+        echo "Installing numpy..."
+        pip install numpy
     fi
 else
     echo "WARNING: python3 not found. Build may fail."

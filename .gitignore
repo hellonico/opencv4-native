@@ -3,5 +3,5 @@ opencv
 sos/
 opencv_contrib/
 
-natives/
+
 *.deprecated

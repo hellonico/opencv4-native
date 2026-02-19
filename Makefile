@@ -45,6 +45,10 @@ release: deep-clean clone configure build harvest deploy-core deploy-natives
 # Only release natives (assumes core is already done)
 release-natives: harvest deploy-natives
 
+# Shortcut for building native lib from scratch (Clean -> Clone -> Build -> Harvest)
+package-native: deep-clean clone configure build harvest
+	@echo "Native library built and placed in $(NATIVES_FOLDER)/$(CURRENT_ARCH)"
+
 deep-clean:
 	rm -fr $(CV_SOURCE_DIR) opencv_contrib $(BUILD_FOLDER)
 	# We do NOT remove $(NATIVES_FOLDER) as it holds the accumulated binaries

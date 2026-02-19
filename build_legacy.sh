@@ -146,93 +146,98 @@ if ! command -v make &> /dev/null; then
 fi
 
 # --- 5. Build ---
+# --- 5. Build ---
 echo "Starting Build Sequence..."
 
-echo "[1/5] Cleaning..."
-make deep-clean
+if [ "$1" == "resume" ]; then
+    echo "RESUME MODE: Skipping Clean, Clone, and Configure."
+else
+    echo "[1/5] Cleaning..."
+    make deep-clean
 
-echo "[2/5] Cloning OpenCV..."
-make clone
+    echo "[2/5] Cloning OpenCV..."
+    make clone
 
-echo "[3/5] Configuring (CMake) with REDUCED SET (Pi-style)..."
+    echo "[3/5] Configuring (CMake) with REDUCED SET (Pi-style)..."
 
-# Define paths for manual cmake
-CV_SOURCE_DIR=$(pwd)/opencv
-CV_BUILD_DIR=$(pwd)/opencv/build
+    # Define paths for manual cmake
+    CV_SOURCE_DIR=$(pwd)/opencv
+    CV_BUILD_DIR=$(pwd)/opencv/build
 
-# Create build dir if not exists (make configure usually did this via mkdir -p)
-mkdir -p "$CV_BUILD_DIR"
-cd "$CV_BUILD_DIR"
+    # Create build dir if not exists (make configure usually did this via mkdir -p)
+    mkdir -p "$CV_BUILD_DIR"
+    cd "$CV_BUILD_DIR"
 
-# Run CMake with "Reduced/Arm" configuration
-cmake \
-    -D CMAKE_BUILD_TYPE=RELEASE \
-    -G "Unix Makefiles" \
-    -B "$CV_BUILD_DIR" \
-    -D BUILD_SHARED_LIBS=OFF \
-    -D BUILD_CUDA_STUBS=OFF \
-    -D BUILD_DOCS=OFF \
-    -D BUILD_EXAMPLES=OFF \
-    -D BUILD_JASPER=OFF \
-    -D BUILD_JPEG=ON \
-    -D BUILD_OPENEXR=OFF \
-    -D BUILD_PACKAGE=OFF \
-    -D BUILD_PERF_TESTS=OFF \
-    -D BUILD_PNG=ON \
-    -D BUILD_FFMPEG=OFF \
-    -D BUILD_TBB=OFF \
-    -D BUILD_TESTS=OFF \
-    -D BUILD_TIFF=OFF \
-    -D BUILD_WITH_DEBUG_INFO=OFF \
-    -D BUILD_ZLIB=OFF \
-    -D BUILD_WEBP=OFF \
-    -D WITH_ADE=OFF \
-    -D BUILD_opencv_gapi=OFF \
-    -D WITH_1394=OFF \
-    -D WITH_CUBLAS=OFF \
-    -D WITH_CUDA=OFF \
-    -D WITH_CUFFT=OFF \
-    -D WITH_EIGEN=OFF \
-    -D WITH_FFMPEG=OFF \
-    -D WITH_GDAL=OFF \
-    -D WITH_GPHOTO2=OFF \
-    -D WITH_GIGEAPI=OFF \
-    -D WITH_GSTREAMER=OFF \
-    -D WITH_GTK=OFF \
-    -D WITH_INTELPERC=OFF \
-    -D WITH_IPP=OFF \
-    -D WITH_IPP_A=OFF \
-    -D WITH_JASPER=OFF \
-    -D WITH_JPEG=ON \
-    -D WITH_LIBV4L=ON \
-    -D WITH_OPENCL=OFF \
-    -D WITH_OPENCLAMDBLAS=OFF \
-    -D WITH_OPENCLAMDFFT=OFF \
-    -D WITH_OPENCL_SVM=OFF \
-    -D WITH_OPENEXR=OFF \
-    -D WITH_OPENGL=OFF \
-    -D WITH_OPENMP=OFF \
-    -D WITH_OPENNI=OFF \
-    -D WITH_PNG=ON \
-    -D WITH_PTHREADS_PF=OFF \
-    -D WITH_PVAPI=OFF \
-    -D WITH_QT=OFF \
-    -D WITH_TBB=OFF \
-    -D WITH_TIFF=OFF \
-    -D WITH_UNICAP=OFF \
-    -D WITH_V4L=ON \
-    -D WITH_VTK=OFF \
-    -D WITH_WEBP=OFF \
-    -D WITH_XIMEA=OFF \
-    -D WITH_XINE=OFF \
-    -D BUILD_opencv_apps=OFF \
-    -D BUILD_opencv_highgui=ON \
-    -D BUILD_opencv_python_bindings_generator=OFF \
-    -D ENABLE_CXX=1 \
-    "$CV_SOURCE_DIR"
+    # Run CMake with "Reduced/Arm" configuration
+    cmake \
+        -D CMAKE_BUILD_TYPE=RELEASE \
+        -G "Unix Makefiles" \
+        -B "$CV_BUILD_DIR" \
+        -D BUILD_SHARED_LIBS=OFF \
+        -D BUILD_CUDA_STUBS=OFF \
+        -D BUILD_DOCS=OFF \
+        -D BUILD_EXAMPLES=OFF \
+        -D BUILD_JASPER=OFF \
+        -D BUILD_JPEG=ON \
+        -D BUILD_OPENEXR=OFF \
+        -D BUILD_PACKAGE=OFF \
+        -D BUILD_PERF_TESTS=OFF \
+        -D BUILD_PNG=ON \
+        -D BUILD_FFMPEG=OFF \
+        -D BUILD_TBB=OFF \
+        -D BUILD_TESTS=OFF \
+        -D BUILD_TIFF=OFF \
+        -D BUILD_WITH_DEBUG_INFO=OFF \
+        -D BUILD_ZLIB=OFF \
+        -D BUILD_WEBP=OFF \
+        -D WITH_ADE=OFF \
+        -D BUILD_opencv_gapi=OFF \
+        -D WITH_1394=OFF \
+        -D WITH_CUBLAS=OFF \
+        -D WITH_CUDA=OFF \
+        -D WITH_CUFFT=OFF \
+        -D WITH_EIGEN=OFF \
+        -D WITH_FFMPEG=OFF \
+        -D WITH_GDAL=OFF \
+        -D WITH_GPHOTO2=OFF \
+        -D WITH_GIGEAPI=OFF \
+        -D WITH_GSTREAMER=OFF \
+        -D WITH_GTK=OFF \
+        -D WITH_INTELPERC=OFF \
+        -D WITH_IPP=OFF \
+        -D WITH_IPP_A=OFF \
+        -D WITH_JASPER=OFF \
+        -D WITH_JPEG=ON \
+        -D WITH_LIBV4L=ON \
+        -D WITH_OPENCL=OFF \
+        -D WITH_OPENCLAMDBLAS=OFF \
+        -D WITH_OPENCLAMDFFT=OFF \
+        -D WITH_OPENCL_SVM=OFF \
+        -D WITH_OPENEXR=OFF \
+        -D WITH_OPENGL=OFF \
+        -D WITH_OPENMP=OFF \
+        -D WITH_OPENNI=OFF \
+        -D WITH_PNG=ON \
+        -D WITH_PTHREADS_PF=OFF \
+        -D WITH_PVAPI=OFF \
+        -D WITH_QT=OFF \
+        -D WITH_TBB=OFF \
+        -D WITH_TIFF=OFF \
+        -D WITH_UNICAP=OFF \
+        -D WITH_V4L=ON \
+        -D WITH_VTK=OFF \
+        -D WITH_WEBP=OFF \
+        -D WITH_XIMEA=OFF \
+        -D WITH_XINE=OFF \
+        -D BUILD_opencv_apps=OFF \
+        -D BUILD_opencv_highgui=ON \
+        -D BUILD_opencv_python_bindings_generator=OFF \
+        -D ENABLE_CXX=1 \
+        "$CV_SOURCE_DIR"
 
-# Go back to root for next steps
-cd ../..
+    # Go back to root for next steps
+    cd ../..
+fi
 
 echo "[4/5] Building (Compiling)..."
 make build
